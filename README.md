@@ -10,54 +10,118 @@ FIXME
 
 1. Commit
 
-if the branch has changes
-	if the branch is develop
-		print "develop cannot accept changes"
-		return failure
-	else
-		call user defined script (default to "git gui")
-		if the branch still has changes
-			check if user want to stash changes
-			return success
+Commits changes to the local repository. Checks performed:
+
+1. that we are not on develop
+2. that there are changes to be committed
+3. check for previous commits to branch
+
+Actions performed:
+
+1. commit everything (commit)
+2. commit specific file (commit FILE_NAME)
+3. open gui (commit --gui, calls user editable script which executes git gui)
+4. always add all files when appropriate
+
+if branch != develop
+	if there are changes
+		if there was a previous commit
+			if user requested gui
+				run user defined script
+			else
+				amend previous commit
+			end if
 		else
-			return success
+			if user requested gui
+				run user defined script
+			else
+				create new commit
+			end if
 		end if
+		return success
+	else
+		print “there are no changes to commit”
+		return success
 	end if
 else
-	print "nothing to commit"
-	return success
+	print “you cannot commit to develop”
+	return failure
 end if
 
 2. Rebase
 
 Branch to the current branch
+(branch CURRENT_BRANCH --rebase)
 
 3. Branch
 
-Commit
-checkout develop
-pull
-if input branch is not develop
-	checkout input branch
-	rebase
+Checks performed:
+
+1. switching to develop
+2. switch to branch already exists
+3. should rebase
+4. check if changes exist
+5. should pull
+
+Future:
+
+1. similar branch name exists
+
+Actions performed:
+
+1. branch (branch BRANCH_NAME)
+2. branch and rebase (branch BRANCH_NAME --rebase)
+3. branch no pull (branch BRANCH_NAME --no-pull; does not do a pull of rebase)
+
+define perform-branch:
+	if requested branch exists
+		switch to requested branch
+		return success
+	else
+		create requested branch
+		switch to requested branch
+		return success
+	end if
+
+define branch-from-develop:
+	if should pull?
+		pull
+		perform-branch to requested branch
+		if should rebase?
+			rebase
+		end if
+	else
+		perform-branch to requested branch
+	end if
+
+if branch has no changes
+	perform-branch to develop
+	branch-from-develop
+else
+	if branch is develop
+		perform-branch to requested branch
+else
+	commit
+		if there are no changes anymore
+			perform-branch to develop
+			perform-branch-from-develop
+		else
+			should-stash?
+			perform-branch to develop
+			perform-branch-from-develop
+		end if
+	end if
 end if
 
 4. Push
 
-if the branch is not develop
-	Commit
-	if this branch has been committed to before
-		if ok to push according to a user defined push script (defaults to checking a review board instance)
-			push to the root repository
-		else
-			push to the user defined code review repository
-		end if
-	else
-		push to the user defined code review repository
-	end if
-else
-	print "You cannot push from the develop branch"
-end if
+Checks performed:
+
+
+
+Actions performed:
+
+1. push
 
 ## License
 
