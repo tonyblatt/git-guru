@@ -37,6 +37,8 @@
 (defn pull! [git]
   (println "need to put pull code here"))
 
+(defn rebase! [] nil)
+
 (defn branch! [git brch]
   (checkout! git "develop")
   (pull! git)
