@@ -74,12 +74,12 @@ Actions performed:
 3. branch no pull (branch BRANCH_NAME --no-pull; does not do a pull of rebase)
 
 define perform-branch:
-	if requested branch exists
-		switch to requested branch
+	if requested branch exists (exists)
+		switch to requested branch (exists)
 		return success
 	else
 		create requested branch
-		switch to requested branch
+		switch to requested branch (exists)
 		return success
 	end if
 
