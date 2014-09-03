@@ -73,41 +73,41 @@ Actions performed:
 2. branch and rebase (branch BRANCH_NAME --rebase)
 3. branch no pull (branch BRANCH_NAME --no-pull; does not do a pull of rebase)
 
-define perform-branch:
-	if requested branch exists (exists)
-		switch to requested branch (exists)
+define perform-branch: (perform-branch!)
+	if requested branch exists (contains-branch?)
+		switch to requested branch (checkout!)
 		return success
 	else
-		create requested branch
-		switch to requested branch (exists)
+		create requested branch (create-branch!)
+		switch to requested branch (checkout!)
 		return success
 	end if
 
 define branch-from-develop:
 	if should pull?
 		pull
-		perform-branch to requested branch
+		perform-branch to requested branch (perform-branch!)
 		if should rebase?
 			rebase
 		end if
 	else
-		perform-branch to requested branch
+		perform-branch to requested branch (perform-branch!)
 	end if
 
-if branch has no changes
-	perform-branch to develop
+if branch has no changes (has-changes?)
+	perform-branch to develop (perform-branch!)
 	branch-from-develop
 else
 	if branch is develop
-		perform-branch to requested branch
-else
-	commit
-		if there are no changes anymore
-			perform-branch to develop
+		perform-branch to requested branch (perform-branch!)
+  else
+	  commit
+		if there are no changes anymore (has-changes?)
+			perform-branch to develop (perform-branch!)
 			perform-branch-from-develop
 		else
 			should-stash?
-			perform-branch to develop
+			perform-branch to develop (perform-branch!)
 			perform-branch-from-develop
 		end if
 	end if

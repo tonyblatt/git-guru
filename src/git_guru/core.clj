@@ -18,13 +18,12 @@
 (defn status [git]
   (. git status))
 
-(defn has-changes? [git]
-  (.. git (status) (call) (hasUncommittedChanges)))
+;(defn pull! [git]
+;  (println "need to put pull code here"))
 
-(defn pull! [git]
-  (println "need to put pull code here"))
+;(defn rebase! [] nil)
 
-(defn rebase! [] nil)
+(defn branch! [git brch should-pull? should-rebase?])
 
 (defn -main [& d]
   (println "here"))
