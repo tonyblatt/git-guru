@@ -66,6 +66,7 @@
 ; brch (string) - the name of the branch you wish to go to
 ; should-pull (boolean) - we should pull on the master branch.
 ; should-rebase (boolean) - we should rebase on the branch we move to.
+; tested and working
 (defn branch-from-master! [git brch should-pull? should-rebase?]
   (if should-pull?
     (let []

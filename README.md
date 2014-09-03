@@ -96,7 +96,7 @@ define branch-from-develop:
 
 if branch has no changes (has-changes?)
 	perform-branch to develop (perform-branch!)
-	branch-from-develop
+	branch-from-develop (branch-from-master!)
 else
 	if branch is develop
 		perform-branch to requested branch (perform-branch!)
@@ -104,11 +104,11 @@ else
 	  commit
 		if there are no changes anymore (has-changes?)
 			perform-branch to develop (perform-branch!)
-			perform-branch-from-develop
+			perform-branch-from-develop (branch-from-master!)
 		else
 			should-stash?
 			perform-branch to develop (perform-branch!)
-			perform-branch-from-develop
+			perform-branch-from-develop (branch-from-master!)
 		end if
 	end if
 end if
