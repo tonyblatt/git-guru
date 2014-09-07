@@ -80,3 +80,8 @@
 ; tested and working
 (defn has-changes? [git]
   (.. git (status) (call) (hasUncommittedChanges)))
+
+; gets the current branch from git
+; tested and working
+(defn get-current-branch [git]
+  (.. git (getRepository) (getBranch)))

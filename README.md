@@ -6,6 +6,19 @@ A Clojure application designed to aid the user in using Git.
 
 FIXME
 
+## cases
+
+1. commit (necessary)
+2. commit FILE_NAME
+3. commit --gui
+4. rebase (necessary)
+5. rebase --all -> scripts not ready for yet
+6. branch BRANCH_NAME (necessary) -> top level
+7. branch BRANCH_NAME --rebase
+8. branch BRANCH_NAME --no-pull
+9. push (necessary) -> to level
+10. push --update
+
 ## What each script does
 
 1. Commit
@@ -117,11 +130,46 @@ end if
 
 Checks performed:
 
-
+1. check if branch is up to date
+2. check if branch has ship it
+3. check if there are any local changes to commit
+4. check if there is already a review board post from this branch
+5. check if there are changes to the local branch
+6. check if rebase had any impact
 
 Actions performed:
 
-1. push
+1. push (push) (description: sends to review board, updates review board, applies patch)
+2. update specific review (push --update)
+
+Pseudo-code:
+
+if commit == success
+	if there are still changes to the branch
+		print “cannot push with uncommitted changes”
+	else
+		rebase
+		if rebase had an impact
+			print “update from server made changes. please retest before pushing.”
+		else
+			if branch has already been pushed from
+				if the user requested an update or review board does not have a shippit
+					update review on review board
+					print “need to publish changes to have code review done”
+				else
+					download diff and push diff to server -- apply patch
+					finish the branch
+				end if
+			else
+				post changes to review board
+			print out review number
+				print “need to publish changes to have code review done”
+			end if
+		end if
+	end if
+else
+	print “cannot push from this branch”
+end if
 
 ## License
 

@@ -4,6 +4,8 @@
   (:import org.eclipse.jgit.internal.storage.file.FileRepository)
   (:import java.io.File))
 
+(def master-branch "master")
+
 (defn foo
   "I don't do a whole lot."
   [x]
@@ -23,7 +25,14 @@
 
 ;(defn rebase! [] nil)
 
-(defn branch! [git brch should-pull? should-rebase?])
+
+(defn branch! [git brch should-pull? should-rebase?]
+  (if (has-changes? git)
+    (let []
+      (perform-branch! g master-branch)
+      (branch-from-master! g brch should-pull? should-rebase?))
+    (if (= master-branch (get-current-branch git))
+      )))
 
 (defn -main [& d]
   (println "here"))
