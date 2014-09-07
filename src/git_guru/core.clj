@@ -34,6 +34,12 @@
 ;    (if (= master-branch (get-current-branch git))
 ;      )))
 
+(defn count-of-params [flag args]
+  (count (filter
+           (fn [x]
+             (= x flag))
+           args)))
+
 (defn branch! [args]
   (let [rebasing (= 1
                     (count (filter
@@ -42,6 +48,10 @@
                              args)))]
     (cond rebasing (println "rebase here")
           :else (println "generic branching here"))))
+
+; (defn push! [args]
+;   (let [updating (= 1
+;		    (count (filter  
 
 (defn -main [& d]
   (println "here")
