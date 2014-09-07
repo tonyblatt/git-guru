@@ -26,13 +26,13 @@
 ;(defn rebase! [] nil)
 
 
-(defn branch! [git brch should-pull? should-rebase?]
-  (if (has-changes? git)
-    (let []
-      (perform-branch! g master-branch)
-      (branch-from-master! g brch should-pull? should-rebase?))
-    (if (= master-branch (get-current-branch git))
-      )))
+;(defn branch! [git brch should-pull? should-rebase?]
+;  (if (has-changes? git)
+;    (let []
+;      (perform-branch! git master-branch)
+;      (branch-from-master! git brch should-pull? should-rebase?))
+;    (if (= master-branch (get-current-branch git))
+;      )))
 
 (defn -main [& d]
   (println "here"))
