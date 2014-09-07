@@ -34,6 +34,8 @@
 ;    (if (= master-branch (get-current-branch git))
 ;      )))
 
+;counts number of times flag appears in args
+;tested and working
 (defn count-of-params [flag args]
   (count (filter
            (fn [x]
@@ -49,9 +51,14 @@
     (cond rebasing (println "rebase here")
           :else (println "generic branching here"))))
 
-; (defn push! [args]
-;   (let [updating (= 1
-;		    (count (filter  
+;push not completed
+(defn push! [args]
+  (let [default (= 1 (count args))
+        update (and (= 1 (count-of-params "--update" args))
+                    (= 2 (count args)))]
+    (cond default (println "push default")
+          update (println "updating")
+          :else (println "un-recognized push!"))))
 
 (defn -main [& d]
   (println "here")
