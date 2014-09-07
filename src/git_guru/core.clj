@@ -20,20 +20,6 @@
 (defn status [git]
   (. git status))
 
-;(defn pull! [git]
-;  (println "need to put pull code here"))
-
-;(defn rebase! [] nil)
-
-
-;(defn branch! [git brch should-pull? should-rebase?]
-;  (if (has-changes? git)
-;    (let []
-;      (perform-branch! git master-branch)
-;      (branch-from-master! git brch should-pull? should-rebase?))
-;    (if (= master-branch (get-current-branch git))
-;      )))
-
 ;counts number of times flag appears in args
 ;tested and working
 (defn count-of-params [flag args]
@@ -63,7 +49,6 @@
 (defn -main [& d]
   (println "here")
   (println d)
-
   (let [branching (= (first d) "branch")]
     (cond branching (branch! d)
           :else (println "not a known script"))))
