@@ -34,5 +34,19 @@
 ;    (if (= master-branch (get-current-branch git))
 ;      )))
 
+(defn branch! [args]
+  (let [rebasing (= 1
+                    (count (filter
+                             (fn [x]
+                               (= x "--rebase"))
+                             args)))]
+    (cond rebasing (println "rebase here")
+          :else (println "generic branching here"))))
+
 (defn -main [& d]
-  (println "here"))
+  (println "here")
+  (println d)
+
+  (let [branching (= (first d) "branch")]
+    (cond branching (branch! d)
+          :else (println "not a known script"))))
