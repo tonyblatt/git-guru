@@ -10,6 +10,10 @@
 
 (defn rebase! [git] (println "rebasing needs to be written (and moved)"))
 
+(defn commit! [git] (println "commiting needs to be written (and moved)"))
+
+(defn stash! [git] (println "stashing needs to be written (and moved)"))
+
 ; checkout! performs the action of checking out the specified branch
 ; tested and working
 ; RefNotFoundException Ref develop can not be resolved org.eclipse.jgit.api.CheckoutCommand.call (CheckoutCommand.java:241)
@@ -85,3 +89,25 @@
 ; tested and working
 (defn get-current-branch [git]
   (.. git (getRepository) (getBranch)))
+
+(defn tlb-no-changes! [git brch should-pull? should-rebase?]
+  (perform-branch! git "master")
+  (branch-from-master! git brch should-pull? should-rebase?))
+
+(defn tlb-not-master! [git brch should-pull? should-rebase?]
+  (commit! git)
+  (if (has-changes? git)
+    (tlb-no-changes! git brch should-pull? should-rebase?)
+    (let []
+      (stash! git)
+      (tlb-no-changes! git brch should-pull? should-rebase?))))
+
+(defn tlb-has-changes! [git brch should-pull? should-rebase?]
+  (if (= (get-current-branch git) "master")
+    (perform-branch! git brch)
+    (tlb-not-master! git brch should-pull? should-rebase?)))
+
+(defn top-level-branch [git brch should-pull? should-rebase?]
+  (if (has-changes? git)
+    (tlb-has-changes! git brch should-pull? should-rebase?)
+    (tlb-no-changes! git brch should-pull? should-rebase?)))
