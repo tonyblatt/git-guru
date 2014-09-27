@@ -9,15 +9,13 @@ FIXME
 ## cases
 
 1. commit (necessary)
-2. commit FILE_NAME
-3. commit --gui
-4. rebase (necessary)
-5. rebase --all -> scripts not ready for yet
-6. branch BRANCH_NAME (necessary) -> top level
-7. branch BRANCH_NAME --rebase
-8. branch BRANCH_NAME --no-pull
-9. push (necessary) -> to level
-10. push --update
+2. rebase (necessary)
+3. rebase --all -> scripts not ready for yet
+4. branch BRANCH_NAME (necessary) -> top level
+5. branch BRANCH_NAME --rebase
+6. branch BRANCH_NAME --no-pull
+7. push (necessary) -> to level
+8. push --update
 
 ## What each script does
 
