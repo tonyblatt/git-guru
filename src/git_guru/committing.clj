@@ -1,14 +1,9 @@
 (ns git-guru.committing
   (:require [git-guru.branching :refer :all])
-  (:import org.eclipse.jgit.api.Git)
-  (:require [clojure.java.shell :refer :all]))
-
-(def FAILURE "FAILURE")
-
-(def SUCCESS "SUCCESS")
-
-(defn is-develop? [git]
-  false)
+  (:require [clojure.java.shell :refer :all])
+  (:require [git-guru.commands :refer :all])
+  (:require [git-guru.questions :refer :all])
+  (:require [git-guru.constants :refer :all]))
 
 (defn print-ret [str ret]
   (let []

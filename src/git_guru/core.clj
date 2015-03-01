@@ -37,6 +37,9 @@
     (cond rebasing (println "rebase here")
           :else (println "generic branching here"))))
 
+(defn branch! [go-to]
+  )
+
 ;push not completed
 (defn push! [args]
   (let [default (= 1 (count args))

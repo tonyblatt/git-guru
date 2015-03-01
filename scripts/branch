@@ -1,2 +1,2 @@
 cd ..
-lein run branch $1 $2
+lein run branch $1
