@@ -1,9 +1,10 @@
 (ns git-guru.committing
-  (:require [git-guru.branching :refer :all])
+  ;(:require [git-guru.branching :refer :all])
   (:require [clojure.java.shell :refer :all])
   (:require [git-guru.commands :refer :all])
   (:require [git-guru.questions :refer :all])
-  (:require [git-guru.constants :refer :all]))
+  (:require [git-guru.constants :refer :all])
+  (:import java.lang.Runtime))
 
 (defn print-ret [str ret]
   (let []
@@ -17,8 +18,13 @@
       (print-ret "there are no changes to commit" SUCCESS))
     (print-ret "you cannot commit to develop/master" FAILURE)))
 
-(defn gui []
-  (sh "git" "gui"))
+(defn gui [a success failure]
+  ;(sh "git" "gui")
+  (let [runtime (Runtime/getRuntime)
+        proc (. runtime (exec "git gui"))]
+    (. proc (waitFor))
+    (. proc (destroy)))
+  success)
 
 (defn add-all []
   (sh "git" "add" "."))

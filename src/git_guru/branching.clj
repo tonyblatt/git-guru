@@ -1,7 +1,8 @@
 (ns git-guru.branching
   (:require [git-guru.commands :refer :all])
   (:require [git-guru.questions :refer :all])
-  (:require [git-guru.constants :refer :all]))
+  (:require [git-guru.constants :refer :all])
+  (:require [git-guru.committing :refer :all]))
 
 ; function here to determine if this name space can be reached
 (defn foo-ha [] (println "hahaha"))
@@ -9,8 +10,6 @@
 (defn pull! [git] (println "pulling needs to be filled in (and moved)"))
 
 (defn rebase! [git] (println "rebasing needs to be written (and moved)"))
-
-(defn commit! [git] (println "commiting needs to be written (and moved)"))
 
 (defn stash! [git] (println "stashing needs to be written (and moved)"))
 
@@ -44,7 +43,7 @@
   (branch-from-master! git brch should-pull? should-rebase?))
 
 (defn tlb-not-master! [git brch should-pull? should-rebase?]
-  (commit! git)
+  (commit! nil git)
   (if (has-changes? git)
     (tlb-no-changes! git brch should-pull? should-rebase?)
     (let []

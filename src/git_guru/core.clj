@@ -1,5 +1,6 @@
 (ns git-guru.core
   (:require [git-guru.branching :refer :all])
+  (:require [git-guru.committing :refer :all])
   (:import org.eclipse.jgit.api.Git)
   (:import org.eclipse.jgit.internal.storage.file.FileRepository)
   (:import java.io.File))
@@ -49,9 +50,14 @@
           update (println "updating")
           :else (println "un-recognized push!"))))
 
+(defn commit-top! [params]
+  (commit! gui (gen-git)))
+
 (defn -main [& d]
   (println "here")
   (println d)
-  (let [branching (= (first d) "branch")]
-    (cond branching (branch! d)
+  (let [branching (= (first d) "branch")
+        committing (= (first d) "commit")]
+    (cond committing (commit-top! (rest d))
+          branching (branch! d)
           :else (println "not a known script"))))
