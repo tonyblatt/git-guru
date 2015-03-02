@@ -1,6 +1,7 @@
 (ns git-guru.core
   (:require [git-guru.branching :refer :all])
   (:require [git-guru.committing :refer :all])
+  (:require [git-guru.commands :refer :all])
   (:import org.eclipse.jgit.api.Git)
   (:import org.eclipse.jgit.internal.storage.file.FileRepository)
   (:import java.io.File))
@@ -30,8 +31,8 @@
            args)))
 
 
-(defn branch! [args]
-  (do-branch! (gen-git) (first args) false))
+(defn branch! [git args]
+  (do-branch! git (first args) false))
 
 ;push not completed
 (defn push! [args]
@@ -45,11 +46,17 @@
 (defn commit-top! [params]
   (commit! gui (gen-git)))
 
+(defn rebase-top! []
+  (let [git (gen-git)]
+    (branch! git [(get-current-branch git)])))
+
 (defn -main [& d]
   (println "here")
   (println d)
   (let [branching (= (first d) "branch")
-        committing (= (first d) "commit")]
+        committing (= (first d) "commit")
+        rebasing (= (first d) "rebase")]
     (cond committing (commit-top! (rest d))
-          branching (branch! (rest d))
+          branching (branch! (gen-git) (rest d))
+          rebasing (rebase-top!)
           :else (println "not a known script"))))

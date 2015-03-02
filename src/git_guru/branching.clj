@@ -69,8 +69,7 @@
     (let []
       (checkout! git (get-develop-branch-name git))
       (pull! git)
-      (if (or (= brch-nm (get-develop-branch-name git))
-              (= (str "refs/heads/" brch-nm) (get-develop-branch-name git)))
+      (if (= brch-nm (get-develop-branch-name git))
         SUCCESS
         (if (contains-branch? git brch-nm)
           (let []
