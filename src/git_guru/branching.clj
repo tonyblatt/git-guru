@@ -7,10 +7,6 @@
 ; function here to determine if this name space can be reached
 (defn foo-ha [] (println "hahaha"))
 
-(defn pull! [git] (println "pulling needs to be filled in (and moved)"))
-
-(defn rebase! [git] (println "rebasing needs to be written (and moved)"))
-
 (defn stash! [git] (println "stashing needs to be written (and moved)"))
 
 ; takes care of basic branching logistics
@@ -59,3 +55,29 @@
   (if (has-changes? git)
     (tlb-has-changes! git brch should-pull? should-rebase?)
     (tlb-no-changes! git brch should-pull? should-rebase?)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn get-develop-branch-name [git]
+  (if (contains-branch? git "develop")
+    "develop"
+    "master"))
+
+(defn do-branch! [git brch-nm force?]
+  (commit! gui git)
+  (if (has-changes? git)
+    (print-ret "Cannot switch branch with outstanding changes" FAILURE)
+    (let []
+      (checkout! git (get-develop-branch-name git))
+      (pull! git)
+      (if (or (= brch-nm (get-develop-branch-name git))
+              (= (str "refs/heads/" brch-nm) (get-develop-branch-name git)))
+        SUCCESS
+        (if (contains-branch? git brch-nm)
+          (let []
+            (checkout! git brch-nm)
+            (rebase! git (get-develop-branch-name git)))
+          (let []
+            (create-branch! git brch-nm)
+            (checkout! git brch-nm)))))))
+  ;(if (and (not force?) (has-changes? git))
+  ;  (print-ret "Cannot commit branch with changes (use --force option if you wish to switch anyway)" FAILURE)))

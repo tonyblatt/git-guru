@@ -11,7 +11,7 @@
 (defn checkout! [git brch]
   (.. git
       (checkout)
-      (setName brch)
+      (setName (str "refs/heads/" brch))
       (call)))
 
 ; utility funciton for extracting the name from a ref
@@ -40,3 +40,9 @@
 ; tested and working
 (defn get-current-branch [git]
   (.. git (getRepository) (getBranch)))
+
+(defn pull! [git]
+  (.. git (pull) (call)))
+
+(defn rebase! [git dest]
+  (.. git (rebase) (setUpstream dest) (call)))

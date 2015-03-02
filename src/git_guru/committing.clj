@@ -19,7 +19,6 @@
     (print-ret "you cannot commit to develop/master" FAILURE)))
 
 (defn gui [a success failure]
-  ;(sh "git" "gui")
   (let [runtime (Runtime/getRuntime)
         proc (. runtime (exec "git gui"))]
     (. proc (waitFor))

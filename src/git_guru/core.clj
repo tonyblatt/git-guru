@@ -29,17 +29,9 @@
              (= x flag))
            args)))
 
-(defn branch! [args]
-  (let [rebasing (= 1
-                    (count (filter
-                             (fn [x]
-                               (= x "--rebase"))
-                             args)))]
-    (cond rebasing (println "rebase here")
-          :else (println "generic branching here"))))
 
-(defn branch! [go-to]
-  )
+(defn branch! [args]
+  (do-branch! (gen-git) (first args) false))
 
 ;push not completed
 (defn push! [args]
@@ -59,5 +51,5 @@
   (let [branching (= (first d) "branch")
         committing (= (first d) "commit")]
     (cond committing (commit-top! (rest d))
-          branching (branch! d)
+          branching (branch! (rest d))
           :else (println "not a known script"))))
