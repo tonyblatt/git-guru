@@ -64,7 +64,7 @@
 
 (defn do-branch! [git brch-nm force?]
   (commit! gui git)
-  (if (has-changes? git)
+  (if (and (has-changes? git) (not (= (get-develop-branch-name git) (get-current-branch git))))
     (print-ret "Cannot switch branch with outstanding changes" FAILURE)
     (let []
       (checkout! git (get-develop-branch-name git))
@@ -78,5 +78,3 @@
           (let []
             (create-branch! git brch-nm)
             (checkout! git brch-nm)))))))
-  ;(if (and (not force?) (has-changes? git))
-  ;  (print-ret "Cannot commit branch with changes (use --force option if you wish to switch anyway)" FAILURE)))

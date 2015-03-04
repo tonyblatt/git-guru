@@ -1,2 +1,3 @@
-cd ..
-lein run branch $1
+_mydir="$(pwd)"
+cd ~/straight-dice/git-guru/scripts
+lein run branch $_mydir $1

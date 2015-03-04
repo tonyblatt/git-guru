@@ -1,2 +1,3 @@
-cd ..
-lein run rebase
+_mydir="$(pwd)"
+cd ~/straight-dice/git-guru/scripts
+lein run rebase $_mydir

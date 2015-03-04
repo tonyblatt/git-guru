@@ -6,57 +6,31 @@
   (:import org.eclipse.jgit.internal.storage.file.FileRepository)
   (:import java.io.File))
 
-(def master-branch "master")
-
 (defn foo
   "I don't do a whole lot."
   [x]
   (println x "Hello, World!"))
 
-(defn gen-git []
-  (Git/open (new File ".")))
-
-;(defn gen-git []
-;  (new Git (gen-repo)))
+(defn gen-git [loc]
+  (Git/open (new File loc)))
 
 (defn status [git]
   (. git status))
 
-;counts number of times flag appears in args
-;tested and working
-(defn count-of-params [flag args]
-  (count (filter
-           (fn [x]
-             (= x flag))
-           args)))
-
-
 (defn branch! [git args]
-  (do-branch! git (first args) false))
+  (do-branch! git args false))
 
-;push not completed
-(defn push! [args]
-  (let [default (= 1 (count args))
-        update (and (= 1 (count-of-params "--update" args))
-                    (= 2 (count args)))]
-    (cond default (println "push default")
-          update (println "updating")
-          :else (println "un-recognized push!"))))
+(defn commit-top! [git]
+  (commit! gui git))
 
-(defn commit-top! [params]
-  (commit! gui (gen-git)))
+(defn rebase-top! [git]
+  (branch! git [(get-current-branch git)]))
 
-(defn rebase-top! []
-  (let [git (gen-git)]
-    (branch! git [(get-current-branch git)])))
-
-(defn -main [& d]
-  (println "here")
-  (println d)
-  (let [branching (= (first d) "branch")
-        committing (= (first d) "commit")
-        rebasing (= (first d) "rebase")]
-    (cond committing (commit-top! (rest d))
-          branching (branch! (gen-git) (rest d))
-          rebasing (rebase-top!)
+(defn -main [script loc & d]
+  (let [branching (= script "branch")
+        committing (= script "commit")
+        rebasing (= script "rebase")]
+    (cond committing (commit-top! (gen-git loc))
+          branching (branch! (gen-git loc) (first d))
+          rebasing (rebase-top! (gen-git loc))
           :else (println "not a known script"))))

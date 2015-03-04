@@ -1,2 +1,3 @@
-cd ..
-lein run commit
+_mydir="$(pwd)"
+cd ~/straight-dice/git-guru/scripts
+lein run commit $_mydir
