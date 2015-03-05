@@ -7,7 +7,7 @@
   (:import java.io.File))
 
 (defn foo
-  "I don't do a whole lot."
+  "Test Func."
   [x]
   (println x "Hello, World!"))
 
