@@ -1,7 +1,15 @@
 (ns git-guru.commands
   (:import org.eclipse.jgit.api.Git)
   (:import org.eclipse.jgit.api.CheckoutCommand)
-  (:import org.eclipse.jgit.internal.storage.file.FileRepository))
+  (:import org.eclipse.jgit.internal.storage.file.FileRepository)
+  (:import org.eclipse.jgit.api.RebaseResult$Status)
+  (:require [clojure.java.shell :refer :all]))
+
+(defn exec-comm [comm-str]
+  (let [runtime (Runtime/getRuntime)
+            proc (. runtime (exec comm-str))]
+        (. proc (waitFor))
+        (. proc (destroy))))
 
 ; checkout! performs the action of checking out the specified branch
 ; tested and working
@@ -45,4 +53,8 @@
   (.. git (pull) (call)))
 
 (defn rebase! [git dest]
-  (.. git (rebase) (setUpstream dest) (call)))
+  (let [res (.. git (rebase) (setUpstream dest) (call))]
+    (if (= (. res (getStatus)) (. RebaseResult$Status STOPPED))
+      (let []
+        (exec-comm "git mergetool --tool=meld --no-prompt")
+        (exec-comm "git rebase --continue")))))

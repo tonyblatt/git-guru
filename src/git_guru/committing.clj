@@ -19,10 +19,7 @@
     (print-ret "you cannot commit to develop/master" FAILURE)))
 
 (defn gui [a success failure]
-  (let [runtime (Runtime/getRuntime)
-        proc (. runtime (exec "git gui"))]
-    (. proc (waitFor))
-    (. proc (destroy)))
+  (exec-comm "git gui")
   success)
 
 (defn add-all []
