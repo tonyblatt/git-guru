@@ -24,7 +24,7 @@
   (commit! gui git))
 
 (defn rebase-top! [git]
-  (branch! git [(get-current-branch git)]))
+  (branch! git (get-current-branch git)))
 
 (defn -main [script loc & d]
   (let [branching (= script "branch")
