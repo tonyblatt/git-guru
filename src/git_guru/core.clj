@@ -7,7 +7,7 @@
   (:import java.io.File))
 
 (defn foo
-  "Test Func."
+  "Conflict Test."
   [x]
   (println x "Hello, World!"))
 
