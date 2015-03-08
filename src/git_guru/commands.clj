@@ -5,7 +5,7 @@
   (:import org.eclipse.jgit.api.RebaseResult$Status)
   (:require [clojure.java.shell :refer :all]))
 
-; conflict tests
+; Procedure for executing an external command
 (defn exec-comm [comm-str]
   (let [runtime (Runtime/getRuntime)
             proc (. runtime (exec comm-str))]
