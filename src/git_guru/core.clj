@@ -9,7 +9,7 @@
 (defn foo
   "Basic test function for repl testing."
   [x]
-  (println x "Hello, World!"))
+  (println x "Hello, World! and everyone else."))
 
 (defn gen-git [loc]
   (Git/open (new File loc)))
