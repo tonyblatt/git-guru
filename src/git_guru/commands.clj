@@ -4,6 +4,7 @@
   (:import org.eclipse.jgit.internal.storage.file.FileRepository)
   (:import org.eclipse.jgit.api.RebaseResult$Status)
   (:import org.eclipse.jgit.api.RebaseCommand$Operation)
+  (:import java.io.File)
   (:require [clojure.java.shell :refer :all]))
 
 ; Procedure for executing an external command
@@ -60,5 +61,5 @@
       (let []
         (exec-comm "git mergetool --tool=meld --no-prompt")
         (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))
-        (println (.. git (status) (call) (getUntracked)))
-        ))))
+        (let [base-str (.. git (getRepository) (getDirectory) (getPath))]
+          (reduce (fn [x loc] (. (new File (clojure.string/replace base-str ".git" loc)) delete)) (.. git (status) (call) (getUntracked))))))))
