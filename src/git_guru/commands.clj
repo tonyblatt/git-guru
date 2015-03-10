@@ -59,5 +59,6 @@
     (if (= (. res (getStatus)) (. RebaseResult$Status STOPPED))
       (let []
         (exec-comm "git mergetool --tool=meld --no-prompt")
-        (println "here now")
-        (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))))))
+        (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))
+        (println (.. git (status) (call) (getUntracked)))
+        ))))
