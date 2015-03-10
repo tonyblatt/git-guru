@@ -3,6 +3,7 @@
   (:import org.eclipse.jgit.api.CheckoutCommand)
   (:import org.eclipse.jgit.internal.storage.file.FileRepository)
   (:import org.eclipse.jgit.api.RebaseResult$Status)
+  (:import org.eclipse.jgit.api.RebaseCommand$Operation)
   (:require [clojure.java.shell :refer :all]))
 
 ; Procedure for executing an external command
@@ -58,4 +59,5 @@
     (if (= (. res (getStatus)) (. RebaseResult$Status STOPPED))
       (let []
         (exec-comm "git mergetool --tool=meld --no-prompt")
-        (exec-comm "git rebase --continue")))))
+        (println "here now")
+        (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))))))
