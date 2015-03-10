@@ -1,6 +1,6 @@
 (ns git-guru.constants)
 
-; fail const
+; failure constant
 (def ^:const FAILURE "FAILURE")
 
 (def ^:const SUCCESS "SUCCESS")

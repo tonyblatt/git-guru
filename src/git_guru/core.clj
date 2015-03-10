@@ -11,8 +11,8 @@
   [x]
   (println x "Hello, World!"))
 
-(defn gen-git [loc]
-  (Git/open (new File loc)))
+(defn gen-git [f]
+  (Git/open f))
 
 (defn status [git]
   (. git status))
@@ -26,11 +26,20 @@
 (defn rebase-top! [git]
   (branch! git (get-current-branch git)))
 
+(defn get-root-dir [f]
+  (if (= nil f)
+    nil
+    (if (reduce (fn [b loc] (or b (= ".git" loc))) false (. f list))
+      f
+      (recur (. f getParentFile)))))
+
 (defn -main [script loc & d]
-  (let [branching (= script "branch")
+  (let [f (get-root-dir (new File loc))
+        branching (= script "branch")
         committing (= script "commit")
         rebasing (= script "rebase")]
-    (cond committing (commit-top! (gen-git loc))
-          branching (branch! (gen-git loc) (first d))
-          rebasing (rebase-top! (gen-git loc))
+    (reduce (fn [x y] (println y)) false (.. (gen-git f) (status) (call) (getUntracked)))
+    (cond committing (commit-top! (gen-git f))
+          branching (branch! (gen-git f) (first d))
+          rebasing (rebase-top! (gen-git f))
           :else (println "not a known script"))))
