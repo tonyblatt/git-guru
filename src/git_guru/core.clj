@@ -7,7 +7,7 @@
   (:import java.io.File))
 
 (defn foo
-  "Basic test function for repl use."
+  "Never seen this"
   [x]
   (println x "Hello, World!"))
 
