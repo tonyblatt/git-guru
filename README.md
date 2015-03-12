@@ -2,9 +2,54 @@
 
 A Clojure application designed to aid the user in using Git.
 
+## Setup
+
+### Requirements
+
+1. Clojure
+2. Leiningen
+
+### Git-guru Setup
+
+1. Checkout Git-guru to ~/bin/
+2. Add ~/bin/git-guru/scripts to your path
+
 ## Usage
 
-FIXME
+### Commit
+#### Description
+
+Commits your code to the current branch
+
+#### Command
+
+commit
+
+#### What the Script Does
+
+1. Checks to make sure you are not currently on develop/master
+2. Brings up git gui for you
+
+### Branch
+#### Description
+
+#### Command
+
+#### What the Script Does
+
+### Rebase
+#### Description
+
+#### Command
+
+#### What the Script Does
+
+### Push
+#### Description
+
+#### Command
+
+#### What the Script Does
 
 ## cases
 

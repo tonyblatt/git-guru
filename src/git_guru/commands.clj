@@ -62,4 +62,4 @@
         (exec-comm "git mergetool --tool=meld --no-prompt")
         (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))
         (let [base-str (.. git (getRepository) (getDirectory) (getPath))]
-          (reduce (fn [x loc] (. (new File (clojure.string/replace base-str ".git" loc)) delete)) false (.. git (status) (call) (getUntracked))))))))
+          (doall (map (fn [loc] (. (new File (clojure.string/replace base-str ".git" loc)) delete)) (.. git (status) (call) (getUntracked)))))))))
