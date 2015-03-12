@@ -33,19 +33,39 @@ commit
 ### Branch
 #### Description
 
+Move from one branch to another.
+
 #### Command
 
+branch BRANCH_NAME
+
 #### What the Script Does
+
+1. Commits your code (see the commit script for how this works)
+2. Prevents you from switching branches if you have code to commit and are not on develop/master
+3. Switches you to develop/master
+4. Executes a git pull
+5. If BRANCH_NAME is develop/master, exits
+6. If BRANCH_NAME exists, switches to and rebases (this is the git rebase not the script rebase) that branch, otherwise (BRANCH_NAME does not exist), creates BRANCH_NAME and switches to it
 
 ### Rebase
 #### Description
 
+Updates the current branch to the most current code from the server. This is essentially the same as executing 'branch CURRENT_BRANCH'.
+
 #### Command
+
+rebase
 
 #### What the Script Does
 
+1. Gets the current branch
+2. Branches to the current branch
+
 ### Push
 #### Description
+
+Not yet implemented.
 
 #### Command
 
