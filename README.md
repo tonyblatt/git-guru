@@ -4,15 +4,12 @@ A Clojure application designed to aid the user in using Git.
 
 ## Setup
 
-### Requirements
-
-1. Clojure
-2. Leiningen
-
-### Git-guru Setup
-
 1. Checkout Git-guru to ~/bin/
 2. Add ~/bin/git-guru/scripts to your path
+3. install wget on your cygwin
+3.1 from the windows command pompt, execute: \path\to\cygwin\installer -q -P wget,git,git-gui
+4. execute install-git-guru in git-guru/scripts
+5. add git-guru/scripts to your system path
 
 ## Usage
 
@@ -71,6 +68,9 @@ Not yet implemented.
 
 #### What the Script Does
 
+=================================
+Developer Notes
+=================================
 ## cases
 
 1. commit (necessary)

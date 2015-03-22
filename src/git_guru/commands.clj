@@ -55,11 +55,18 @@
 (defn pull! [git]
   (.. git (pull) (call)))
 
-(defn rebase! [git dest]
+(defn rebase! [git dest tool]
   (let [res (.. git (rebase) (setUpstream dest) (call))]
     (if (= (. res (getStatus)) (. RebaseResult$Status STOPPED))
-      (let []
+      (let [com (str "git mergetool --tool=" tool " --no-prompt")]
         (exec-comm "git mergetool --tool=meld --no-prompt")
         (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))
         (let [base-str (.. git (getRepository) (getDirectory) (getPath))]
-          (doall (map (fn [loc] (. (new File (clojure.string/replace base-str ".git" loc)) delete)) (.. git (status) (call) (getUntracked)))))))))
+          (doall (map (fn [loc] (. (new File (clojure.string/replace base-str ".git" loc)) delete)) (.. git (status) (call) (getUntracked)))))))
+    (. res (getStatus))))
+
+(defn apply-patch! [])
+
+(defn update-review! [])
+
+(defn create-review![])

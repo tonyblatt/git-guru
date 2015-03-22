@@ -2,6 +2,7 @@
   (:require [git-guru.branching :refer :all])
   (:require [git-guru.committing :refer :all])
   (:require [git-guru.commands :refer :all])
+  (:require [git-guru.pushing :refer :all])
   (:import org.eclipse.jgit.api.Git)
   (:import org.eclipse.jgit.internal.storage.file.FileRepository)
   (:import java.io.File))
@@ -11,6 +12,9 @@
   [x]
   (println x "Hello, World!"))
 
+(defn get-settings []
+  (read-dats "store/settings.txt"))
+
 (defn gen-git [f]
   (Git/open f))
 
@@ -18,7 +22,7 @@
   (. git status))
 
 (defn branch! [git args]
-  (do-branch! git args false))
+  (do-branch! git args false (get-settings)))
 
 (defn commit-top! [git]
   (commit! gui git))

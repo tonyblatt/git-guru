@@ -17,3 +17,5 @@
 (defn is-develop? [git]
   (let [brch (get-current-branch git)]
     (or (= "master" brch) (= "develop" brch))))
+
+(defn has-ship-it? [] true)
