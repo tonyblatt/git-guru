@@ -1,3 +1,3 @@
 _mydir="$(pwd)"
-cd ~/straight-dice/git-guru/scripts
+cd ~/bin/git-guru/scripts
 lein run commit $_mydir

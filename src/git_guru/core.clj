@@ -42,7 +42,6 @@
         branching (= script "branch")
         committing (= script "commit")
         rebasing (= script "rebase")]
-    (reduce (fn [x y] (println y)) false (.. (gen-git f) (status) (call) (getUntracked)))
     (cond committing (commit-top! (gen-git f))
           branching (branch! (gen-git f) (first d))
           rebasing (rebase-top! (gen-git f))
