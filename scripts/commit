@@ -1,3 +1,4 @@
 _mydir="$(pwd)"
 cd ~/bin/git-guru/scripts
+git pull
 lein run commit $_mydir

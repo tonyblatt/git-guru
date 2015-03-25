@@ -50,7 +50,7 @@ branch BRANCH_NAME
 ### Rebase
 #### Description
 
-Updates the current branch to the most current code from the server. This is essentially the same as executing 'branch CURRENT_BRANCH'.
+Rebases the current branch to the most current code from the server. This is the same as executing 'branch CURRENT_BRANCH'.
 
 #### Command
 
@@ -58,8 +58,13 @@ rebase
 
 #### What the Script Does
 
-1. Gets the current branch
-2. Branches to the current branch
+1. Commits your code (see the commit script for how this works)
+2. Prevents you from switching branches if you have code to commit and are not on develop/master
+3. Stores the CURRENT_BRANCH as BRANCH_NAME
+4. Switches you to develop/master
+5. Executes a git pull
+6. Switches to BRANCH_NAME
+7. Rebases BRANCH_NAME
 
 ### Push
 #### Description

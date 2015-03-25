@@ -18,12 +18,9 @@
       (print-ret "there are no changes to commit" SUCCESS))
     (print-ret "you cannot commit to develop/master" FAILURE)))
 
-(defn gui [a success failure]
+(defn gui [git success failure]
   (exec-comm "git gui")
   success)
-
-(defn add-all []
-  (sh "git" "add" "."))
 
 (defn add-specific [])
 

@@ -7,9 +7,13 @@
   (:import java.io.File)
   (:require [clojure.java.shell :refer :all]))
 
+(defn get-repo-location [git]
+  (.. git (getRepository) (getDirectory) (getParentFile) (getPath)))
+
 ; Procedure for executing an external command
-(defn exec-comm [comm-str]
-  (let [runtime (Runtime/getRuntime)
+(defn exec-comm [git comm-str]
+  (let [comm-str-2 (str "(cd " (get-repo-location git) "; " comm-str ")")
+        runtime (Runtime/getRuntime)
             proc (. runtime (exec comm-str))]
         (. proc (waitFor))
         (. proc (destroy))))
@@ -59,7 +63,7 @@
   (let [res (.. git (rebase) (setUpstream dest) (call))]
     (if (= (. res (getStatus)) (. RebaseResult$Status STOPPED))
       (let [com (str "git mergetool --tool=" tool " --no-prompt")]
-        (exec-comm "git mergetool --tool=meld --no-prompt")
+        (exec-comm com)
         (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))
         (let [base-str (.. git (getRepository) (getDirectory) (getPath))]
           (doall (map (fn [loc] (. (new File (clojure.string/replace base-str ".git" loc)) delete)) (.. git (status) (call) (getUntracked)))))))
