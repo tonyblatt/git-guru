@@ -19,7 +19,7 @@
     (print-ret "you cannot commit to develop/master" FAILURE)))
 
 (defn gui [git success failure]
-  (exec-comm "git gui")
+  (exec-comm git "git gui")
   success)
 
 (defn add-specific [])
