@@ -12,11 +12,10 @@
 
 ; Procedure for executing an external command
 (defn exec-comm [git comm-str]
-  (let [comm-str-2 (str "(cd " (get-repo-location git) "; " comm-str ")")
-        runtime (Runtime/getRuntime)
-            proc (. runtime (exec comm-str))]
-        (. proc (waitFor))
-        (. proc (destroy))))
+  (let [runtime (Runtime/getRuntime)
+        proc (. runtime (exec comm-str nil (new File (get-repo-location git))))]
+    (. proc (waitFor))
+    (. proc (destroy))))
 
 ; checkout! performs the action of checking out the specified branch
 ; tested and working
