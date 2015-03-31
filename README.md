@@ -4,12 +4,12 @@ A Clojure application designed to aid the user in using Git.
 
 ## Setup
 
-1. Checkout Git-guru to ~/bin/
+1. Clone Git-guru to ~/bin/ (git clone https://github.com/tonyblatt/git-guru.git)
 2. Add ~/bin/git-guru/scripts to your path
 3. install wget, git and git-gui on your cygwin
 3.1 from the windows command pompt, execute: \path\to\cygwin\installer -q -P wget,git,git-gui
 4. Install whatever git mergetool you would like to use
-5. Edit ~/bin/store/settings.txt merge-tool to be your preferred merge tool (meld is the default)
+5. Edit ~/bin/git-guru/store/settings.txt merge-tool to be your preferred merge tool (meld is the default)
 6. execute install-git-guru in git-guru/scripts
 7. add git-guru/scripts to your system path
 
