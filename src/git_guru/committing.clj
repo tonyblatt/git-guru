@@ -4,6 +4,7 @@
   (:require [git-guru.commands :refer :all])
   (:require [git-guru.questions :refer :all])
   (:require [git-guru.constants :refer :all])
+  (:require [git-guru.logging :refer :all])
   (:import java.lang.Runtime))
 
 (defn print-ret [str ret]
@@ -19,9 +20,7 @@
     (print-ret "you cannot commit to develop/master" FAILURE)))
 
 (defn gui [git success failure]
-  (exec-comm git "git gui")
+  (let [com "git gui"]
+    (log! com)
+    (exec-comm git "git gui"))
   success)
-
-(defn add-specific [])
-
-(defn exec-command [config-property])

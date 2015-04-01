@@ -27,4 +27,5 @@
             (rebase! git (get-develop-branch-name git) (settings "merge-tool")))
           (let []
             (create-branch! git brch-nm)
-            (checkout! git brch-nm)))))))
+            (checkout! git brch-nm))))
+      (println (str "you are now on branch " (get-current-branch git))))))

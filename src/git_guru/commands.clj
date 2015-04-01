@@ -5,7 +5,9 @@
   (:import org.eclipse.jgit.api.RebaseResult$Status)
   (:import org.eclipse.jgit.api.RebaseCommand$Operation)
   (:import java.io.File)
-  (:require [clojure.java.shell :refer :all]))
+  (:require [clojure.java.shell :refer :all])
+  (:require [git-guru.logging :refer :all])
+  (:require [git-guru.constants :refer :all]))
 
 (defn get-repo-location [git]
   (.. git (getRepository) (getDirectory) (getParentFile) (getPath)))
@@ -26,7 +28,8 @@
   (.. git
       (checkout)
       (setName (str "refs/heads/" brch))
-      (call)))
+      (call))
+  (log! (str "git checkout " brch)))
 
 ; utility funciton for extracting the name from a ref
 ; tested and working
@@ -37,6 +40,7 @@
 ; Note: branches come back in the form "refs/heads/BRANCH_NAME"
 ; tested and working
 (defn list-branches [git]
+  (log! "git branch --list")
   (map extract-name
        (.. git
            (branchList)
@@ -48,7 +52,8 @@
   (.. git
       (branchCreate)
       (setName brch)
-      (call)))
+      (call))
+  (log! (str "git branch " brch)))
 
 ; gets the current branch from git
 ; tested and working
@@ -56,15 +61,20 @@
   (.. git (getRepository) (getBranch)))
 
 (defn pull! [git]
+  (log! "git pull")
   (.. git (pull) (call)))
 
 (defn rebase! [git dest tool]
+  (log! "git rebase develop")
   (let [res (.. git (rebase) (setUpstream dest) (call))]
     (if (= (. res (getStatus)) (. RebaseResult$Status STOPPED))
       (let [com (str "git mergetool --tool=" tool " --no-prompt")]
+        (log! com)
         (exec-comm com)
+        (log! "git rebase --continue")
         (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))
         (let [base-str (.. git (getRepository) (getDirectory) (getPath))]
+          (log! "delete all new untracked files")
           (doall (map (fn [loc] (. (new File (clojure.string/replace base-str ".git" loc)) delete)) (.. git (status) (call) (getUntracked)))))))
     (. res (getStatus))))
 
