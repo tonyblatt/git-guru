@@ -1,4 +1,7 @@
 _mydir="$(pwd)"
+if [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ];then
+  _mydir=cygpath -w _mydir
+fi
 cd ~/bin/git-guru/scripts
 git pull
 lein run rebase $_mydir
