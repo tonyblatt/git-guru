@@ -70,7 +70,7 @@
     (if (= (. res (getStatus)) (. RebaseResult$Status STOPPED))
       (let [com (str "git mergetool --tool=" tool " --no-prompt")]
         (log! com)
-        (exec-comm com)
+        (exec-comm git com)
         (log! "git rebase --continue")
         (.. git (rebase) (setUpstream dest) (setOperation (. RebaseCommand$Operation CONTINUE)) (call))
         (let [base-str (.. git (getRepository) (getDirectory) (getPath))]
