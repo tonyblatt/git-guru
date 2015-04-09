@@ -44,17 +44,7 @@
   (let [f (get-root-dir (new File loc))
         branching (= script "branch")
         committing (= script "commit")
-        rebasing (= script "rebase")
-        ;red (read-line)
-        console (. System (console))]
-        ;pwd (.readPassword console "tell me your password: ")]
-    (println console)
-    (println System/in)
-    (println (System/console))
-    ;(println (String/valueOf (.readPassword (System/console) "Password:" nil)))
-    ;(println red)
-    ;(println pwd)
-    (println (get-settings))
+        rebasing (= script "rebase")]
     (cond committing (commit-top! (gen-git f))
           branching (branch! (gen-git f) (first d))
           rebasing (rebase-top! (gen-git f))
