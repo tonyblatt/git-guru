@@ -5,6 +5,7 @@
   (:import org.eclipse.jgit.api.RebaseResult$Status)
   (:import org.eclipse.jgit.api.RebaseCommand$Operation)
   (:import java.io.File)
+  (:import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider)
   (:require [clojure.java.shell :refer :all])
   (:require [git-guru.logging :refer :all])
   (:require [git-guru.constants :refer :all]))
@@ -18,6 +19,19 @@
         proc (. runtime (exec comm-str nil (new File (get-repo-location git))))]
     (. proc (waitFor))
     (. proc (destroy))))
+
+(defn get-pass! []
+  (String/valueOf (.readPassword (System/console)
+                                 "Password:" nil)))
+
+(defn get-uname! []
+  (String/valueOf (.readLine (System/console)
+                                 "User Name:" nil)))
+
+(defn get-uname-and-pass! [settings]
+  (let [uname (if (settings "specify-user-name") (settings "user-name") (get-uname!))
+        pass (get-pass!)]
+    (new UsernamePasswordCredentialsProvider uname pass)))
 
 ; checkout! performs the action of checking out the specified branch
 ; tested and working
@@ -60,9 +74,11 @@
 (defn get-current-branch [git]
   (.. git (getRepository) (getBranch)))
 
-(defn pull! [git]
+(defn pull! [git settings]
   (log! "git pull")
-  (.. git (pull) (call)))
+  (if (settings "use-public-key-authentication")
+    (.. git (pull) (call))
+    (.. git (pull) (setCredentialsProvider (get-uname-and-pass! settings)) (call))))
 
 (defn rebase! [git dest tool]
   (log! "git rebase develop")

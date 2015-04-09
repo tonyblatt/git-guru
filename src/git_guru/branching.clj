@@ -18,7 +18,7 @@
     (print-ret "Cannot switch branch with outstanding changes" FAILURE)
     (let []
       (checkout! git (get-develop-branch-name git))
-      (pull! git)
+      (pull! git settings)
       (if (= brch-nm (get-develop-branch-name git))
         SUCCESS
         (if (contains-branch? git brch-nm)

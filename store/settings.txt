@@ -1,1 +1,4 @@
-{"merge-tool":"meld"}
+{"merge-tool":"meld",
+ "use-public-key-authentication":true
+ "specify-user-name":true
+ "user-name":"your-user-name-here"}
