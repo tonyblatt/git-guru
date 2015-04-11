@@ -6,6 +6,7 @@
   (:import org.eclipse.jgit.api.RebaseCommand$Operation)
   (:import java.io.File)
   (:import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider)
+  (:import java.lang.System)
   (:require [clojure.java.shell :refer :all])
   (:require [git-guru.logging :refer :all])
   (:require [git-guru.constants :refer :all]))
