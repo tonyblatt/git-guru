@@ -9,7 +9,8 @@
   (:import java.lang.System)
   (:require [clojure.java.shell :refer :all])
   (:require [git-guru.logging :refer :all])
-  (:require [git-guru.constants :refer :all]))
+  (:require [git-guru.constants :refer :all])
+  (:gen-class))
 
 (defn get-repo-location [git]
   (.. git (getRepository) (getDirectory) (getParentFile) (getPath)))
@@ -22,6 +23,7 @@
     (. proc (destroy))))
 
 (defn get-pass! []
+  (println (str "System/console value = " (System/console))) ; debug statement
   (String/valueOf (.readPassword (System/console)
                                  "Password:" nil)))
 

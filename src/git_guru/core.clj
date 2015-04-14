@@ -40,7 +40,6 @@
       (recur (. f getParentFile)))))
 
 (defn -main [script loc & d]
-  ;(print "enter uname")
   (let [f (get-root-dir (new File loc))
         branching (= script "branch")
         committing (= script "commit")
