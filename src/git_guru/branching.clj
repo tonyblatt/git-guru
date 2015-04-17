@@ -12,13 +12,13 @@
     "develop"
     "master"))
 
-(defn do-branch! [git brch-nm force? settings]
+(defn do-branch! [git brch-nm console force? settings]
   (commit! gui git)
   (if (and (has-changes? git) (not (= (get-develop-branch-name git) (get-current-branch git))))
     (print-ret "Cannot switch branch with outstanding changes" FAILURE)
     (let []
       (checkout! git (get-develop-branch-name git))
-      (pull! git settings)
+      (pull! git  console settings)
       (if (= brch-nm (get-develop-branch-name git))
         SUCCESS
         (if (contains-branch? git brch-nm)

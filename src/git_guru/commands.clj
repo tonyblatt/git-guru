@@ -22,18 +22,18 @@
     (. proc (waitFor))
     (. proc (destroy))))
 
-(defn get-pass! []
+(defn get-pass! [console]
   (println (str "System/console value = " (System/console))) ; debug statement
-  (String/valueOf (.readPassword (System/console)
+  (String/valueOf (.readPassword (console)
                                  "Password:" nil)))
 
-(defn get-uname! []
-  (String/valueOf (.readLine (System/console)
+(defn get-uname! [console]
+  (String/valueOf (.readLine (console)
                                  "User Name:" nil)))
 
-(defn get-uname-and-pass! [settings]
-  (let [uname (if (settings "specify-user-name") (settings "user-name") (get-uname!))
-        pass (get-pass!)]
+(defn get-uname-and-pass! [console settings]
+  (let [uname (if (settings "specify-user-name") (settings "user-name") (get-uname! console))
+        pass (get-pass! console)]
     (new UsernamePasswordCredentialsProvider uname pass)))
 
 ; checkout! performs the action of checking out the specified branch
@@ -77,11 +77,11 @@
 (defn get-current-branch [git]
   (.. git (getRepository) (getBranch)))
 
-(defn pull! [git settings]
+(defn pull! [git console settings]
   (log! "git pull")
   (if (settings "use-public-key-authentication")
     (.. git (pull) (call))
-    (.. git (pull) (setCredentialsProvider (get-uname-and-pass! settings)) (call))))
+    (.. git (pull) (setCredentialsProvider (get-uname-and-pass! console settings)) (call))))
 
 (defn rebase! [git dest tool]
   (log! "git rebase develop")

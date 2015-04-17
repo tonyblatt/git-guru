@@ -24,7 +24,7 @@
   (. git status))
 
 (defn branch! [git args]
-  (do-branch! git args false (get-settings)))
+  (do-branch! git args (System/console) false (get-settings)))
 
 (defn commit-top! [git]
   (commit! gui git))
