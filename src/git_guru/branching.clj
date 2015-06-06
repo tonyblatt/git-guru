@@ -7,11 +7,13 @@
 ; function here to determine if this name space can be reached
 (defn foo-ha [] (println "hahaha"))
 
+; determines the branch name of the develop branch
 (defn get-develop-branch-name [git]
   (if (contains-branch? git "develop")
     "develop"
     "master"))
 
+; top level for perfroming a branch operation
 (defn do-branch! [git brch-nm console force? settings]
   (commit! gui git)
   (if (and (has-changes? git) (not (= (get-develop-branch-name git) (get-current-branch git))))

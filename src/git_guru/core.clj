@@ -9,29 +9,37 @@
   (:import java.lang.System)
   (:gen-class))
 
+; procedure for testing the REPL
 (defn foo
   "Basic test function for repl testing."
   [x]
   (println x "Hello, World!"))
 
+; procedure for reading in the settings
 (defn get-settings []
   (read-dats "../store/settings.txt"))
 
+; procedure for getting a Git object to manipulate
 (defn gen-git [f]
   (Git/open f))
 
+; gets the current git status object
 (defn status [git]
   (. git status))
 
+; procedure for switching from one branch to another
 (defn branch! [git args]
   (do-branch! git args (System/console) false (get-settings)))
 
+; procedure for commiting to the repository
 (defn commit-top! [git]
   (commit! gui git))
 
+; procedure for rebasing the current branch
 (defn rebase-top! [git]
   (branch! git (get-current-branch git)))
 
+; gets the root directory of the repository, this is necessary for creating the git object
 (defn get-root-dir [f]
   (if (= nil f)
     nil
@@ -39,6 +47,7 @@
       f
       (recur (. f getParentFile)))))
 
+; entry point for the application
 (defn -main [script loc & d]
   (let [f (get-root-dir (new File loc))
         branching (= script "branch")

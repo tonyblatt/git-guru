@@ -7,11 +7,13 @@
   (:require [git-guru.logging :refer :all])
   (:import java.lang.Runtime))
 
-(defn print-ret [str ret]
+; unitility for printing a message and returning a value (similar to spy)
+(defn print-ret [s ret]
   (let []
-    (println str)
+    (println s)
     ret))
 
+; does some checks and performs the commit
 (defn commit! [commit-base-fn git]
   (if (not (is-develop? git))
     (if (has-changes? git)
@@ -19,6 +21,7 @@
       (print-ret "there are no changes to commit" SUCCESS))
     (print-ret "you cannot commit to develop/master" FAILURE)))
 
+; typical base procedure for committing, brings up git gui
 (defn gui [git success failure]
   (let [com "git gui"]
     (log! com)

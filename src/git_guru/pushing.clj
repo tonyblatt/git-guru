@@ -7,13 +7,16 @@
   (:import org.eclipse.jgit.api.RebaseResult$Status)
   (:import (java.io BufferedWriter FileWriter)))
 
+; generic procedure for writing text data to a file
 (defn perform-write [file-name data]
   (with-open [wtr (BufferedWriter. (FileWriter.	file-name))]
     (.write wtr	data)))
 
+; generic procedure for reading text data from a file
 (defn read-dats [file-loc]
   (json/read-str (slurp file-loc)))
 
+; writes a data structure to a file as a json text string
 (defn write-dats [file-loc dats]
   (perform-write file-loc (json/write-str dats)))
 
@@ -25,7 +28,10 @@
 
 (defn create [git dats])
 
+; commented out because this fails to compile at this point in time
 (comment
+; procedure for pushing data to the repository
+; untested
 (defn push! [git curr-cranch]
   (if (qs/is-develop? git)
     (let []

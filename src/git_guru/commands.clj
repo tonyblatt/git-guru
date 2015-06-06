@@ -12,6 +12,7 @@
   (:require [git-guru.constants :refer :all])
   (:gen-class))
 
+; utility for getting the path to the repo location
 (defn get-repo-location [git]
   (.. git (getRepository) (getDirectory) (getParentFile) (getPath)))
 
@@ -22,22 +23,26 @@
     (. proc (waitFor))
     (. proc (destroy))))
 
+; gets a password from a console
+; does not work on cygwin because cygwin does not have access to the java console
 (defn get-pass! [console]
   (println (str "System/console value = " (System/console))) ; debug statement
   (String/valueOf (.readPassword (console)
                                  "Password:" nil)))
 
+; gets a user name from a console
+; does not work on cygwin because cygwin does not have access to the java console
 (defn get-uname! [console]
   (String/valueOf (.readLine (console)
                                  "User Name:" nil)))
 
+; gets a user name and passowrd and returns a credential provider
 (defn get-uname-and-pass! [console settings]
   (let [uname (if (settings "specify-user-name") (settings "user-name") (get-uname! console))
         pass (get-pass! console)]
     (new UsernamePasswordCredentialsProvider uname pass)))
 
 ; checkout! performs the action of checking out the specified branch
-; tested and working
 ; RefNotFoundException Ref develop can not be resolved org.eclipse.jgit.api.CheckoutCommand.call (CheckoutCommand.java:241)
 ; indicates that the brch does not exist
 ; Note: develop == master
@@ -49,13 +54,11 @@
   (log! (str "git checkout " brch)))
 
 ; utility funciton for extracting the name from a ref
-; tested and working
 (defn extract-name [r]
   (. r getName))
 
 ; lists the available branches (in string form) contained in git
 ; Note: branches come back in the form "refs/heads/BRANCH_NAME"
-; tested and working
 (defn list-branches [git]
   (log! "git branch --list")
   (map extract-name
@@ -64,7 +67,6 @@
            (call))))
 
 ; creates a new branch in git
-; tested and working
 (defn create-branch! [git brch]
   (.. git
       (branchCreate)
@@ -73,16 +75,17 @@
   (log! (str "git branch " brch)))
 
 ; gets the current branch from git
-; tested and working
 (defn get-current-branch [git]
   (.. git (getRepository) (getBranch)))
 
+; performs a pull command against the repository
 (defn pull! [git console settings]
   (log! "git pull")
   (if (settings "use-public-key-authentication")
     (.. git (pull) (call))
     (.. git (pull) (setCredentialsProvider (get-uname-and-pass! console settings)) (call))))
 
+; performs a rebase operation against the repository
 (defn rebase! [git dest tool]
   (log! "git rebase develop")
   (let [res (.. git (rebase) (setUpstream dest) (call))]

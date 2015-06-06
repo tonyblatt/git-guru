@@ -99,42 +99,9 @@ Commits changes to the local repository. Checks performed:
 2. that there are changes to be committed
 3. check for previous commits to branch
 
-Actions performed:
-
-1. commit everything (commit)
-2. commit specific file (commit FILE_NAME)
-3. open gui (commit --gui, calls user editable script which executes git gui)
-4. always add all files when appropriate
-
-if branch != develop
-	if there are changes
-		if there was a previous commit
-			if user requested gui
-				run user defined script
-			else
-				amend previous commit
-			end if
-		else
-			if user requested gui
-				run user defined script
-			else
-				create new commit
-			end if
-		end if
-		return success
-	else
-		print “there are no changes to commit”
-		return success
-	end if
-else
-	print “you cannot commit to develop”
-	return failure
-end if
-
 2. Rebase
 
 Branch to the current branch
-(branch CURRENT_BRANCH --rebase)
 
 3. Branch
 
@@ -149,52 +116,6 @@ Checks performed:
 Future:
 
 1. similar branch name exists
-
-Actions performed:
-
-1. branch (branch BRANCH_NAME)
-2. branch and rebase (branch BRANCH_NAME --rebase)
-3. branch no pull (branch BRANCH_NAME --no-pull; does not do a pull of rebase)
-
-define perform-branch: (perform-branch!)
-	if requested branch exists (contains-branch?)
-		switch to requested branch (checkout!)
-		return success
-	else
-		create requested branch (create-branch!)
-		switch to requested branch (checkout!)
-		return success
-	end if
-
-define branch-from-develop:
-	if should pull?
-		pull
-		perform-branch to requested branch (perform-branch!)
-		if should rebase?
-			rebase
-		end if
-	else
-		perform-branch to requested branch (perform-branch!)
-	end if
-
-if branch has no changes (has-changes?)
-	perform-branch to develop (perform-branch!)
-	branch-from-develop (branch-from-master!)
-else
-	if branch is develop
-		perform-branch to requested branch (perform-branch!)
-  else
-	  commit
-		if there are no changes anymore (has-changes?)
-			perform-branch to develop (perform-branch!)
-			perform-branch-from-develop (branch-from-master!)
-		else
-			should-stash?
-			perform-branch to develop (perform-branch!)
-			perform-branch-from-develop (branch-from-master!)
-		end if
-	end if
-end if
 
 4. Push
 
