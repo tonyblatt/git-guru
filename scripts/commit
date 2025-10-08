@@ -1,9 +1,0 @@
-_mydir="$(pwd)"
-if [ "$(expr substr $(uname -s) 1 6)" == "CYGWIN" ];then
-  _mydir="$(cygpath -w $_mydir)"
-fi
-cd ~/bin/git-guru
-git pull
-lein uberjar
-cd target
-java -jar git-guru-*-standalone.jar commit $_mydir
