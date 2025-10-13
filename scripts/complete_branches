@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Get the remote location
+origin="$(git remote)"
+# Get the primary branch
+primary_branch_name="$(git remote show "$origin" | sed -n '/HEAD branch/s/.*: //p')"
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+for param in "$@"; do
+  case $param in
+    master|main|develop|"$primary_branch_name")
+      echo "Cannot delete primary branch $param";;
+    "$current_branch")
+      checkout "$primary_branch_name"
+      git branch -D "$param";;
+    *)
+      git branch -D "$param";;
+  esac
+done
