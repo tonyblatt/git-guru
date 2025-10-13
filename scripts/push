@@ -1,0 +1,9 @@
+#!/bin/bash
+
+git pull
+
+if ! git push; then
+  origin="$(git remote)"
+  current_branch="$(git rev-parse --abbrev-ref HEAD)"
+  git push --set-upstream "$origin" "$current_branch"
+fi
