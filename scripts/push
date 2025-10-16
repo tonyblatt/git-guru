@@ -19,8 +19,8 @@ if ! git push; then
   if [ "$http_substring" = "https://" ]; then
     base_https_url="$initial_url"
   elif [ "$git_substring" = "git@" ]; then
-    HTTP_URL=$(echo "$initial_url" | sed 's/git@//' | sed 's/:/\//' | sed 's/\.git//')
-    base_https_url="https://${HTTP_URL}"
+    url_minus_git=$(echo "$initial_url" | sed 's/git@//' | sed 's/:/\//' | sed 's/\.git//')
+    base_https_url="https://${url_minus_git}"
   fi
 
   primary_branch="$(git remote show $origin | sed -n '/HEAD branch/s/.*: //p')"
