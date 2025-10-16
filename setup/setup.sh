@@ -17,7 +17,6 @@ script_dir="${setup_dir%?????}scripts"
 
 add_scripts_to_path="export PATH=\"\$PATH:$script_dir\""
 if grep -Fxq "$add_scripts_to_path" "$profile_location"; then
-#if grep -Fxq "$add_scripts_to_path" "$script_dir/gui"; then
     echo "Skipping adding script dir to the bash profile because it was already present."
 else
     printf "\n%s\n" "$add_scripts_to_path" >> "$profile_location"
