@@ -1,166 +1,60 @@
 # git-guru
 
-A Clojure application designed to aid the user in using Git.
+Utility scripts for automating common git action sets
 
 ## Setup
 
-1. Clone Git-guru to ~/bin/ (git clone https://github.com/tonyblatt/git-guru.git)
-2. Add ~/bin/git-guru/scripts to your path
-3. install wget, git and git-gui on your cygwin
-3.1 from the windows command pompt, execute: \path\to\cygwin\installer -q -P wget,git,git-gui
-4. Install whatever git mergetool you would like to use
-5. Edit ~/bin/git-guru/store/settings.txt merge-tool to be your preferred merge tool (meld is the default)
-6. execute install-git-guru in git-guru/scripts
-7. add git-guru/scripts to your system path
+1. Clone Git-guru (git clone https://github.com/tonyblatt/git-guru.git)
+2. Execute `setup.sh` in the setup directory
 
-## Usage
+## Scripts
 
-### Commit
-#### Description
+### checkout
 
-Commits your code to the current branch
+Checks out the specified branch. More specifically, the script follows these steps:
+1. checkout the primary branch
+2. pulls the primary branch
+3. checks out the branch (creates the branch if it doesn't already exist.)
 
-#### Command
+(In the future, I should add the ability to specify a different base branch other than the primary branch.)
 
-commit
+#### Usage
 
-#### What the Script Does
+```shell
+checkout branch_name
+```
 
-1. Checks to make sure you are not currently on develop/master
-2. Brings up git gui for you
+### complete_branches
 
-### Branch
-#### Description
+Deletes all branches specified as parameters. Protects from deleting the repository specified primary branch and other commonly specified primary branch names (develop, main, master). Switches you off the current branch if that branch is specified.
 
-Move from one branch to another.
+#### Usage
 
-#### Command
+```shell
+complete_branches a_branch another_branch a_third_branch
+```
 
-branch BRANCH_NAME
+### finish_branch_and_new
 
-#### What the Script Does
+Checks out the branch as specified by the parameter. Deletes the branch you are currently on. (Same as `checkout <new branch name>` followed by `complete_branches <the branch you started on>`)
 
-1. Commits your code (see the commit script for how this works)
-2. Prevents you from switching branches if you have code to commit and are not on develop/master
-3. Switches you to develop/master
-4. Executes a git pull
-5. If BRANCH_NAME is develop/master, exits
-6. If BRANCH_NAME exists, switches to and rebases (this is the git rebase not the script rebase) that branch, otherwise (BRANCH_NAME does not exist), creates BRANCH_NAME and switches to it
+#### Usage
 
-### Rebase
-#### Description
+```shell
+finish_branch_and_new next_branch_to_work_on
+```
 
-Rebases the current branch to the most current code from the server. This is the same as executing 'branch CURRENT_BRANCH'.
+### push
 
-#### Command
+Pushes the current branch up to the remote repository. If this is the first time the branch has been pushed, open the primary web browser and navigate to the start of the PR process.
 
-rebase
+```shell
+push
+```
 
-#### What the Script Does
+### gui
 
-1. Commits your code (see the commit script for how this works)
-2. Prevents you from switching branches if you have code to commit and are not on develop/master
-3. Stores the CURRENT_BRANCH as BRANCH_NAME
-4. Switches you to develop/master
-5. Executes a git pull
-6. Switches to BRANCH_NAME
-7. Rebases BRANCH_NAME
-
-### Push
-#### Description
-
-Not yet implemented.
-
-#### Command
-
-#### What the Script Does
-
-=================================
-Developer Notes
-=================================
-## cases
-
-1. commit (necessary)
-2. rebase (necessary)
-3. rebase --all -> scripts not ready for yet
-4. branch BRANCH_NAME (necessary) -> top level
-5. branch BRANCH_NAME --rebase
-6. branch BRANCH_NAME --no-pull
-7. push (necessary) -> to level
-8. push --update
-
-## What each script does
-
-1. Commit
-
-Commits changes to the local repository. Checks performed:
-
-1. that we are not on develop
-2. that there are changes to be committed
-3. check for previous commits to branch
-
-2. Rebase
-
-Branch to the current branch
-
-3. Branch
-
-Checks performed:
-
-1. switching to develop
-2. switch to branch already exists
-3. should rebase
-4. check if changes exist
-5. should pull
-
-Future:
-
-1. similar branch name exists
-
-4. Push
-
-Checks performed:
-
-1. check if branch is up to date
-2. check if branch has ship it
-3. check if there are any local changes to commit
-4. check if there is already a review board post from this branch
-5. check if there are changes to the local branch
-6. check if rebase had any impact
-
-Actions performed:
-
-1. push (push) (description: sends to review board, updates review board, applies patch)
-2. update specific review (push --update)
-
-Pseudo-code:
-
-if commit == success
-	if there are still changes to the branch
-		print “cannot push with uncommitted changes”
-	else
-		rebase
-		if rebase had an impact
-			print “update from server made changes. please retest before pushing.”
-		else
-			if branch has already been pushed from
-				if the user requested an update or review board does not have a shippit
-					update review on review board
-					print “need to publish changes to have code review done”
-				else
-					download diff and push diff to server -- apply patch
-					finish the branch
-				end if
-			else
-				post changes to review board
-			print out review number
-				print “need to publish changes to have code review done”
-			end if
-		end if
-	end if
-else
-	print “cannot push from this branch”
-end if
+Just `git gui`
 
 ## License
 
