@@ -2,4 +2,4 @@
 
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
 checkout "$1"
-git branch -D "$current_branch"
+complete_branches "$current_branch"
