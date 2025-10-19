@@ -24,7 +24,6 @@ else
 fi
 
 add_branch_name_completion_command="source $script_dir/branch-name-completion.bash"
-echo "$add_branch_name_completion_command"
 if grep -Fxq "$add_branch_name_completion_command" "$profile_location"; then
     echo "Skipping adding branch name completion to the bash profile because it was already present."
 else
