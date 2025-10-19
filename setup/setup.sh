@@ -22,3 +22,12 @@ else
     printf "\n%s\n" "$add_scripts_to_path" >> "$profile_location"
     echo "Added script dir to bash profile."
 fi
+
+add_branch_name_completion_command="source $script_dir/branch-name-completion.bash"
+echo "$add_branch_name_completion_command"
+if grep -Fxq "$add_branch_name_completion_command" "$profile_location"; then
+    echo "Skipping adding branch name completion to the bash profile because it was already present."
+else
+    printf "\n%s\n" "$add_branch_name_completion_command" >> "$profile_location"
+    echo "Added branch name completion bash."
+fi
