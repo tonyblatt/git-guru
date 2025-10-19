@@ -1,23 +1,5 @@
 #!/bin/bash
 
-# get the subscript directory
-# 1. Get the path to the script being executed (even if it's a symlink)
-source="${BASH_SOURCE[0]}"
-
-# 2. Loop to resolve all symbolic links
-while [ -h "$source" ]; do
-  # Determine the directory of the current link
-  dir="$( cd -P "$( dirname "$source" )" >/dev/null 2>&1 && pwd )"
-  # Set source to the target of the link
-  source="$(readlink "$source")"
-  # If the target is a relative path, resolve it against the directory of the link
-  [[ $source != /* ]] && source="$dir/$source"
-done
-
-# 3. Final step: Get the absolute directory of the resolved script
-script_dir="$( cd -P "$( dirname "$source" )" >/dev/null 2>&1 && pwd )"
-sub_script_dir="$script_dir/subscripts"
-
 # Get the remote location
 origin="$(git remote)"
 # Get the primary branch
@@ -33,7 +15,7 @@ if [ "$1" == "$primary_branch_name" ]; then
 elif [ "$#" -gt 0 ]; then
     echo "The script was called with at least one parameter. $1"
     git branch -a >> branches.txt
-    if python3 "$sub_script_dir"/branch_already_exists.py "$1"; then
+    if grep -Fxq "$1" "branches.txt"; then
       git checkout "$1"
     else
       git checkout -b "$1"
