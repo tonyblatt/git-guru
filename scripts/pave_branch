@@ -1,0 +1,9 @@
+#!/bin/bash
+
+origin="$(git remote)"
+primary_branch="$(git remote show $origin | sed -n '/HEAD branch/s/.*: //p')" # Default to the legitimate primary branch
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+git checkout "$primary_branch"
+git pull
+git branch -D "$current_branch"
+git checkout -b "$current_branch"
