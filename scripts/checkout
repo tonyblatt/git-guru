@@ -1,24 +1,127 @@
 #!/bin/bash
 
-# Get the remote location
+# Will want to add branch tab-completion for -p and main branch
+# Will want to add tab-completion for -t
+
+#Set up initial variables
+
 origin="$(git remote)"
-# Get the primary branch
-primary_branch_name="$(git remote show $origin | sed -n '/HEAD branch/s/.*: //p')"
+tag="no_tag_input"
+tag_input=0
+input_primary_branch="$(git remote show $origin | sed -n '/HEAD branch/s/.*: //p')" # Default to the legitimate primary branch
+primary_branch_input=0
+target_branch="no_branch_provided"
+target_branch_input=0
 
-# Return to the primary/base branch
-# TOTO: allow the user to input a new base branch somehow?
-git checkout "$primary_branch_name"
-git pull
+# Process the input parameters
+# Need to note which parameters are being used
+while [ $# -gt 0 ]; do
+  case $1 in
+    -t|--tag)
+      tag="$2"
+      tag_input=1
+      shift 2
+      ;;
+    -p|--primary-branch)
+      input_primary_branch="$2"
+      primary_branch_input=1
+      shift 2
+      ;;
+    -h|--help)
+      echo "usage: checkout [-h | --help] [-t <tag> | --tag <tag>] [-p <branch> | --primary-branch <branch>] <branch>"
+      echo ""
+      echo "This command is used to change the git branch. It will create a new branch if the specified branch doesn't exist."
+      echo "You can specify either a tag or a primary branch to use as the basis of the new branch."
+      echo ""
+      echo "tag             The tag you wish to use as the basis of a new branch. (The specified branch cannot already exist.)"
+      echo "primary-branch  The basis branch you would like to use. The specified primary branch will be checked out first and pulled from the remote repository before the specified branch is checked out."
+      exit 0
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      target_branch=$1
+      target_branch_input=1
+      break
+      ;;
+  esac
+done
 
-if [ "$1" == "$primary_branch_name" ]; then
-  echo "requested branch is the primary branch... skipping"
-elif [ "$#" -gt 0 ]; then
-    echo "The script was called with at least one parameter. $1"
-    git branch -a >> branches.txt
-    if grep -Fxq "$1" "branches.txt"; then
-      git checkout "$1"
-    else
-      git checkout -b "$1"
+# Check if the specified branch exists
+branch_list=$(git for-each-ref --format='%(refname:short)' refs/heads/)
+branch_exists=0
+for branch_name in $branch_list; do
+    if [ "$branch_name" = "$target_branch" ]; then
+        branch_exists=1
+        break
     fi
-    rm branches.txt
+done
+
+# Check if the primary branch exists only if the primary branch flag is used to set a new primary branch
+primary_branch_exists=1 # Primary branch will always exist if we determined it algorithmically
+if [ $primary_branch_input -eq 1 ]; then
+  primary_branch_exists=0 # Cannot assume the primary branch exists if the user specified it
+  for branch_name in $branch_list; do
+      if [ "$branch_name" = "$input_primary_branch" ]; then
+        primary_branch_exists=1
+        break
+      fi
+  done
 fi
+
+# Check if the specified tag exists only if the tag flag is used to set a tag as the basis of the new branch
+tag_exists=0
+if [ $tag_input -eq 1 ]; then
+  if git rev-parse --verify --quiet "refs/tags/$tag^0" > /dev/null; then
+    tag_exists=1
+  fi
+fi
+
+# Determine which version of the script we should be executing based on the input configuration.
+# Most versions don't make sense and, thus, short circuit with an error statement
+if [ $tag_input -eq 1 ] && [ $primary_branch_input -eq 1 ]; then
+  # Don't know which input to use as the basis of the branch to check out.
+  echo "Cannot checkout from both a tag and a primary branch at the same time."
+elif [ $target_branch_input -eq 0 ] && [ $primary_branch_exists -eq 1 ]; then
+  # Must just want to get off the current branch to somewhere safe I guess
+  echo "No target branch found, checking out the primary branch."
+  git checkout "$input_primary_branch"
+  git pull
+elif [ $target_branch_input -eq 0 ]; then
+  # Can't know what to check out unless it is specified.
+  echo "Need to provide a branch to check out. (It is expected to be the final parameter of the script.)"
+elif [ $tag_input -eq 1 ] && [ $branch_exists -eq 1 ]; then
+  # Error case: Tags only work as a basis for a new branch.
+  echo "Cannot check out a branch from a tag to a branch which already exists."
+elif [ $tag_input -eq 1 ] && [ $tag_exists -eq 0 ]; then
+  # Cannot use a tag as the basis for a branch if it doesn't exist.
+  echo "Cannot checkout from tag ($tag) which doesn't exist."
+elif [ $tag_input -eq 0 ] && [ $primary_branch_exists -eq 0 ]; then
+  # When using a primary branch as the basis of a branch, we cannot check it out if it doesn't already exist.
+  echo "Primary branch $input_primary_branch does not exist. Must checkout from a valid primary branch."
+elif [ $tag_input -eq 1 ]; then
+  # Check out the new branch from a specified tag
+  git checkout "tags/$tag" -b "$target_branch"
+else
+  # Standard input configuration.
+  # Pull down the primary branch
+  git checkout "$input_primary_branch"
+  git pull
+
+  if [ "$target_branch" = "$input_primary_branch" ]; then
+    # Special case, the user requested the primary branch
+    echo "requested branch is the primary branch... skipping"
+  else
+    if [ $branch_exists -eq 1 ]; then
+      # The branch already exists.
+      git checkout "$target_branch"
+    else
+      # The branch doesn't exist yet.
+      git checkout -b "$target_branch"
+    fi
+  fi
+fi
+
+
