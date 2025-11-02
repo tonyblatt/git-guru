@@ -16,12 +16,16 @@ Checks out the specified branch. More specifically, the script follows these ste
 2. pulls the primary branch
 3. checks out the branch (creates the branch if it doesn't already exist.)
 
-(In the future, I should add the ability to specify a different base branch other than the primary branch.)
+The script also has 2 available flags: -p (--primary-branch) and -t (--tag). The primary branch flag allows you to set an alternate primary branch. The tag flag allows you to check out from a tag instead of a branch. Both the tag and the primary branch flags require that the tag/branch provided already exist. Likewise, the tag flag requires that the branch provided not already exist.
 
 #### Usage
 
 ```shell
 checkout branch_name
+checkout -p <primary-branch-name> branch_name
+checkout --primary-branch <primary-branch-name> branch_name
+checkout -t <tag-name> branch_name
+checkout --tag <tag-name> branch_name
 ```
 
 ### complete_branches
@@ -42,6 +46,16 @@ Checks out the branch as specified by the parameter. Deletes the branch you are 
 
 ```shell
 finish_branch_and_new next_branch_to_work_on
+```
+
+### pave_branch
+
+Deletes all saved data on the current branch before creating a new branch with the same name as the current one.
+
+#### Usage
+
+```shell
+pave_branch
 ```
 
 ### push
