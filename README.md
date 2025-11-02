@@ -70,6 +70,14 @@ push
 
 Just `git gui`
 
+### pull
+
+Just `git pull`
+
+### branch
+
+Just `git branch`
+
 ## License
 
 Copyright © 2014 FIXME
