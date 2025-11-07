@@ -2,11 +2,15 @@
 
 git pull
 
-if ! git push; then
+# Try to send the code to the server
+if ! git push --force; then
+  # The branch doesn't exist on the server
+  # Send the branch up to the server
   origin="$(git remote)"
   current_branch="$(git rev-parse --abbrev-ref HEAD)"
   git push --set-upstream "$origin" "$current_branch"
 
+  # Need to construct the url in order to open a comparison in the browser
   initial_url=$(git remote get-url "$origin" 2>/dev/null)
 
   if [ -z "$initial_url" ]; then
@@ -19,6 +23,7 @@ if ! git push; then
   if [ "$http_substring" = "https://" ]; then
     base_https_url="$initial_url"
   elif [ "$git_substring" = "git@" ]; then
+    # Need to swap git out for https
     url_minus_git=$(echo "$initial_url" | sed 's/git@//' | sed 's/:/\//' | sed 's/\.git//')
     base_https_url="https://${url_minus_git}"
   fi
@@ -27,5 +32,5 @@ if ! git push; then
   current_branch="$(git rev-parse --abbrev-ref HEAD)"
 
   comparison_url="$base_https_url/compare/$primary_branch...$current_branch"
-  xdg-open "$comparison_url"
+  open "$comparison_url"
 fi
