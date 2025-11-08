@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Check if we are dealing with the help flag.
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Pushes the current branch up to the server. Will push the branch up even if it isn't already on the server."
+  echo "No parameters."
+  echo ""
+  exit 0
+fi
+
 git pull
 
 # Try to send the code to the server
@@ -32,5 +40,5 @@ if ! git push --force; then
   current_branch="$(git rev-parse --abbrev-ref HEAD)"
 
   comparison_url="$base_https_url/compare/$primary_branch...$current_branch"
-  open "$comparison_url"
+  open "$comparison_url" > /dev/null
 fi
