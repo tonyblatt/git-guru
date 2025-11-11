@@ -8,4 +8,3 @@ _branch_name_complete()
 }
 
 complete -F _branch_name_complete "complete_branches"
-complete -F _branch_name_complete "checkout"
