@@ -30,3 +30,11 @@ else
     printf "\n%s\n" "$add_branch_name_completion_command" >> "$profile_location"
     echo "Added branch name completion bash."
 fi
+
+add_checkout_completion_command="source $script_dir/checkout-completion.bash"
+if grep -Fxq "$add_checkout_completion_command" "$profile_location"; then
+    echo "Skipping adding checkout completion to the bash profile because it was already present."
+else
+    printf "\n%s\n" "$add_checkout_completion_command" >> "$profile_location"
+    echo "Added checkout completion bash."
+fi
