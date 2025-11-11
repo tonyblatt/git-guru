@@ -1,8 +1,18 @@
 #!/bin/bash
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Deletes all changes on the current branch but maintains the branch name."
+  echo "No parameters"
+  echo ""
+  exit 0
+fi
+
+# Get the primary branch
 origin="$(git remote)"
 primary_branch="$(git remote show $origin | sed -n '/HEAD branch/s/.*: //p')" # Default to the legitimate primary branch
+# Get the current branch
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
+# Delete the current changes
 git checkout "$primary_branch"
 git pull
 git branch -D "$current_branch"
