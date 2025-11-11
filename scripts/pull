@@ -1,3 +1,10 @@
 #!/bin/bash
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Just a shortcut for git pull. Doesn't do anything beyond calling that one command. (Does not pass params through.)"
+  echo "No parameters"
+  echo ""
+  exit 0
+fi
+
 git pull

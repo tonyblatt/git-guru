@@ -1,16 +1,27 @@
 #!/bin/bash
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Deletes any parameters provided. Offers protection for develop, main, master and whatever your primary branch is. Will switch from the current branch to the primary branch  if the current branch is provided as an argument."
+  echo ""
+  echo "Usage: complete_branches <branch to delete> ..."
+  echo ""
+  exit 0
+fi
+
 # Get the remote location
 origin="$(git remote)"
 # Get the primary branch
 primary_branch_name="$(git remote show "$origin" | sed -n '/HEAD branch/s/.*: //p')"
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
 
+# Iterate over arguments to delete each one.
 for param in "$@"; do
   case $param in
     master|main|develop|"$primary_branch_name")
+      # Don't allow the user to delete a primary branch.
       echo "Cannot delete primary branch $param";;
     "$current_branch")
+      # Need to git off of the current branch before it can be deleted
       checkout "$primary_branch_name"
       git branch -D "$param";;
     *)

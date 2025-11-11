@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Completes the current branch and checks out the new branch."
+  echo ""
+  echo "Usage: finish_branch_and_new new_branch_name"
+  echo ""
+  exit 0
+fi
+
 current_branch="$(git rev-parse --abbrev-ref HEAD)"
 checkout "$1"
 complete_branches "$current_branch"
