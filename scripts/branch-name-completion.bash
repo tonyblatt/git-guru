@@ -8,3 +8,4 @@ _branch_name_complete()
 }
 
 complete -F _branch_name_complete "complete_branches"
+complete -F _branch_name_complete "finish_branch_and_new"
