@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# Will want to add branch tab-completion for -p and main branch
-# Will want to add tab-completion for -t
-
 #Set up initial variables
-
 origin="$(git remote)"
 tag="no_tag_input"
 tag_input=0
