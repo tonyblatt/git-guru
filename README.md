@@ -80,7 +80,7 @@ Just `git branch`
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014-2025 FIXME
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
